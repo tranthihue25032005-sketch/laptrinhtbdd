@@ -1,0 +1,15 @@
+[
+  {
+    "id": "p1",
+    "description": "Pizza sauce, cheese...",
+    "sizes": [
+      { "id": "s1", "name": "Small", "price": 10.99 },
+      { "id": "s2", "name": "Medium", "price": 15.99 },
+      { "id": "s3", "name": "Large", "price": 19.99 }
+    ],
+    "addons": [
+      { "id": "a1", "name": "Extra Cheese", "price": 1 },
+      { "id": "a2", "name": "Chicken", "price": 1 }
+    ]
+  }
+]
