@@ -11,7 +11,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
 
   const [quantity, setQuantity] = useState(1);
   const [showFullDesc, setShowFullDesc] = useState(false);
-
+  
   const handleAddToCart = () => {
     if (!user) {
       navigation.navigate("Login");
@@ -48,7 +48,7 @@ export default function ProductDetailScreen({ route, navigation }: any) {
         <Image source={{ uri: product.image }} style={styles.img} />
 
         <Text style={styles.name}>{product.name}</Text>
-        <Text style={styles.price}>{product.price}đ</Text>
+        <Text style={styles.price}>{product.price.toLocaleString()}đ</Text>
         <Text>Chất liệu: {product.material}</Text>
         <Text>Kích thước: {product.size}</Text>
 

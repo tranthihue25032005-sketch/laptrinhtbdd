@@ -109,6 +109,112 @@
     "type": "dog",
     "image": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lnqk4pzx8t7xb4@resize_w900_nl.webp",
     "description": "Súp thịt cao cấp cho chó, giàu dinh dưỡng, giúp bổ sung nước và tăng cường sức khỏe, phù hợp cho chó biếng ăn."
+  },
+  
+  {
+    "id": 12,
+    "name": "Áo cho chó cưng giá rẻ",
+    "price": 30000,
+    "size": "S, M, L, XL",
+    "type": "dog",
+    "material": "Vải Cotton co giãn",
+    "image": "https://down-vn.img.susercontent.com/file/ecfac57870e842649bfbed2d1190fb20_tn",
+    "description": "Áo thời trang dành cho chó cưng với chất liệu vải thoáng mát, co giãn tốt, giúp thú cưng thoải mái vận động."
+  },
+  {
+    "id": 13,
+    "name": "Áo ba lỗ cho mèo đáng yêu, dễ thương",
+    "price": 14000,
+    "size": "XS, S, M",
+    "type": "cat",
+    "material": "Vải thun lạnh",
+    "image": "https://img.lazcdn.com/g/p/3285a2b6967fb37e5dd07c6492e0942f.png_720x720q80.png_.webp",
+    "description": "Áo ba lỗ mỏng nhẹ, họa tiết dễ thương, phù hợp cho mèo mặc hàng ngày hoặc giữ ấm nhẹ trong phòng máy lạnh."
+  },
+  {
+    "id": 14,
+    "name": "Bát cao cấp cho chó",
+    "price": 100000,
+    "size": "15cm, 20cm",
+    "type": "dog",
+    "material": "Nhựa ABS & Inox",
+    "image": "https://paddy.vn/cdn/shop/files/OIP_29.jpg?v=1692494993",
+    "description": "Bát ăn chất liệu cao cấp, chống lật và chống trượt, đảm bảo vệ sinh và độ bền cao cho chó lớn."
+  },
+  {
+    "id": 15,
+    "name": "Bát ăn inox cho mèo",
+    "price": 150000,
+    "size": "Tiêu chuẩn",
+    "type": "cat",
+    "material": "Inox 304 không gỉ",
+    "image": "https://salt.tikicdn.com/cache/750x750/ts/product/f2/c2/a9/b0adb017cb9f709df11571e1cba7d1bf.jpg.webp",
+    "description": "Bát ăn làm từ inox không gỉ, dễ dàng vệ sinh, thiết kế phù hợp với cấu trúc mặt và cổ của mèo."
+  },
+  {
+    "id": 16,
+    "name": "Bát đôi cho chó mèo",
+    "price": 270000,
+    "size": "S,M,L",
+    "type": "cat",
+     "isNew": true,
+     "material": "Nhựa Melamine & Inox",
+    "image": "https://www.petmart.vn/wp-content/uploads/2013/03/bat-an-doi-cho-cho-meo-trang-men-inox-super-design-double-round-bowls.jpg",
+    "description": "Bát ăn đôi kết hợp chất liệu melamine bền bỉ và chén inox không gỉ, tiện lợi cho việc cung cấp cả thức ăn và nước uống."
+  },
+  {
+    "id": 17,
+    "name": "Khay nhựa vệ sinh cho mèo",
+    "price": 65000,
+    "size": "40x30cm",
+    "type": "cat",
+    "material": "Nhựa PP bền",
+    "image": "https://www.petmart.vn/wp-content/uploads/2018/09/khay-ve-sinh-cho-meo-makar-cat-litter-station.jpg",
+    "description": "Khay vệ sinh thành cao giúp hạn chế cát văng ra ngoài, chất liệu nhựa bền đẹp, dễ dàng lau chùi."
+  },
+  {
+    "id": 18,
+    "name": "Khay nhựa vệ sinh cho chó",
+    "price": 69000,
+    "size": "50x40cm",
+    "type": "dog",
+    "material": "Nhựa PVC tổng hợp",
+    "image": "https://imgcdn.thitruongsi.com/tts/rs:fill:1200:0:1:1/g:sm/plain/file://product/2023/10/04/9727ee80-62c5-11ee-a51f-91cd78bcfb2b.jpg",
+    "description": "Khay vệ sinh có lưới lót giúp chân chó luôn khô ráo, phù hợp cho chó nhỏ và chó tập đi vệ sinh đúng chỗ."
+  },
+  {
+    "id": 19,
+    "name": "Dây dắt an toàn",
+    "price": 55000,
+    "size": "1.2m",
+    "type": "dog",
+    "material": "Dây dù Nylon chắc chắn",
+    "image": "https://paddy.vn/cdn/shop/files/day-dat-kem-vong-cho-cho-meo.png?v=1704516981",
+    "description": "Dây dắt chắc chắn kèm vòng cổ, giúp bạn dễ dàng kiểm soát thú cưng khi đi dạo ngoài trời."
+  },
+  {
+    "id": 20,
+    "name": "Dây dắt cho mèo",
+    "price": 55000,
+    "size": "1.0m",
+    "type": "cat",
+    "material": "Dây vải dù mềm",
+    "image": "https://phongkhamthuyvinhlocvet.com/upload/elfinder/huong-dan-su-dung-day-dat-meo-cho-thu-cung-nha-ban%20%281%29.jpg",
+    "description": "Dây dắt chuyên dụng cho mèo với thiết kế nhẹ nhàng, không gây áp lực lên cổ và ngực mèo."
+  },
+  {
+    "id": 21,
+    "name": "Rọ mõm an toàn",
+    "price": 55000,
+    "size": "S,M,L",
+    "type": "dog",
+    "isNew":true,
+    "material": "Silicon mềm / Nhựa dẻo",
+    "image": "https://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-6/517359208_1263859372112270_649274376944264110_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeEzuNtKr8F243rNfkOQXRY8g6z68LDny_GDrPrwsOfL8UuyqYqAvLUcowwbe3PHCyv0nxJ8TN3E4UfG1MTCuKKq&_nc_ohc=qI_ik6GTdKgQ7kNvwH1sXqw&_nc_oc=AdqqLlC7Vt9SdkuWkOyCWr1p305_5Q0R2V_ZHxO7ttNN2NYV20fSFo3lkK9PDcWlPOk&_nc_zt=23&_nc_ht=scontent.fhan14-3.fna&_nc_gid=5TCHiSCHHj4wr2p8eDadUw&_nc_ss=7a3a8&oh=00_Af0c0-w7Llb9cz0eKJhP33ohU50FWf3d9SR3UZt4d8uirQ&oe=69ECD8DE",
+    "description": "Rọ mõm thiết kế thoáng khí, chất liệu nhựa mềm an toàn, giúp ngăn thú cưng cắn hoặc ăn đồ lạ khi ra ngoài."
   }
+
+
+
 ]
 
