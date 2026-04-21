@@ -6,6 +6,7 @@
     "image": "https://bizweb.dktcdn.net/thumb/large/100/307/433/products/vong-cho-cho-meo-cutepets-1.jpg?v=1773215680630",
     "material": "Vải dù cao cấp",
     "size": "40x40cm",
+    "isNew": true,
     "description": "Võng treo cho chó mèo giúp thú cưng có không gian nghỉ ngơi thoải mái và thoáng mát. Sản phẩm được làm từ chất liệu vải bền chắc, mềm mại, an toàn cho da thú cưng. Thiết kế treo tiện lợi, dễ lắp đặt trong lồng hoặc trong nhà. Phù hợp cho cả chó và mèo, đặc biệt thích hợp vào mùa hè giúp giảm nhiệt hiệu quả. Kích thước gọn nhẹ, dễ vệ sinh và giặt sạch."
   },
   
@@ -16,6 +17,7 @@
     "image": "https://khopetshop.net/assets/images/products/thumbs/08032022041742_6068.jpeg_thumb_600x600.jpeg",
     "material": "Nhựa ABS cao cấp",
     "size": "Dung tích 2L",
+    "isNew": true,
     "description": "Máy lọc nước tự động Petkit giúp cung cấp nguồn nước sạch liên tục cho thú cưng. Thiết kế hiện đại, vận hành êm ái, giúp thú cưng uống nước nhiều hơn, tốt cho sức khỏe."
   },
   {
@@ -25,6 +27,7 @@
     "image": "https://down-vn.img.susercontent.com/file/vn-11134207-820l4-mi9qu0xc9khz0a@resize_w900_nl.webp",
     "material": "Hạt dinh dưỡng",
     "size": "3kg",
+    "type": "dog",
     "description": "Thức ăn hạt cao cấp dành cho chó trưởng thành, bổ sung đầy đủ dinh dưỡng giúp phát triển cơ bắp, lông mượt và hệ tiêu hóa khỏe mạnh."
   },
   {
@@ -34,6 +37,7 @@
     "image": "https://thapxanh.com/images/thumbs/0015119_vong-co-cho-meo-voc-25-dai-36-52-cm-rong-25-cm-day-co-co-chot-khoa.jpeg",
     "material": "Vải dù + khóa kim loại",
     "size": "25 - 52 cm",
+    "type": "dog",
     "description": "Vòng cổ cho chó với chất liệu bền chắc, thiết kế thời trang, giúp bạn dễ dàng quản lý thú cưng khi ra ngoài."
   },
   {
@@ -42,6 +46,7 @@
     "price": 45000,
     "material": "Hạt dinh dưỡng",
     "size": "1kg",
+    "type": "cat",
     "image": "https://meocung.vn/_next/image?url=https%3A%2F%2Fcdn.meocung.vn%2Faf585e2b-975a-4817-9c14-cb04852f0bdd.jpg&w=828&q=75",
     "description": "Thức ăn hạt dành cho mèo trưởng thành, cung cấp dinh dưỡng cân đối giúp mèo khỏe mạnh, lông mượt và tăng cường sức đề kháng."
   },
@@ -51,6 +56,7 @@
     "price": 550000,
     "material": "Vải mềm + khóa nhựa",
     "size": "20 - 30 cm",
+    "type": "cat",
     "image": "https://product.hstatic.net/200000264739/product/vong_co_ngoc_5c5bbd43478d410faff7a905ddaaafa6_master.jpg",
     "description": "Vòng cổ dành cho mèo thiết kế nhỏ gọn, nhẹ, an toàn, giúp thú cưng luôn nổi bật và dễ nhận diện."
   },
@@ -60,6 +66,7 @@
     "price": 45000,
     "material": "Cát khử mùi",
     "size": "5kg",
+    "type": "dog",
     "image": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-m071dufz7edrfa_tn",
     "description": "Cát vệ sinh dành cho chó giúp khử mùi hiệu quả, giữ không gian sạch sẽ, dễ sử dụng và tiện lợi."
   },
@@ -69,6 +76,7 @@
     "price": 550000,
     "material": "Cát bentonite",
     "size": "10L",
+    "type": "cat",
     "image": "https://down-vn.img.susercontent.com/file/1d4a2b3fcf0adf26ba60c341705bc24b.webp",
     "description": "Cát vệ sinh cho mèo với khả năng vón cục nhanh, khử mùi tốt, giúp không gian luôn sạch sẽ và dễ dàng dọn dẹp."
   },
@@ -78,6 +86,7 @@
     "price": 45000,
     "material": "Thịt + dinh dưỡng",
     "size": "400g",
+    "type": "dog",
     "image": "https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m2tkkettfw928b@resize_w900_nl.webp",
     "description": "Pate mềm dành cho chó, giàu dinh dưỡng, dễ ăn, phù hợp cho mọi độ tuổi, giúp kích thích vị giác thú cưng."
   },
@@ -87,6 +96,7 @@
     "price": 550000,
     "material": "Thịt + cá",
     "size": "350g",
+    "type": "cat",
     "image": "https://salt.tikicdn.com/cache/750x750/ts/product/f2/c2/a9/b0adb017cb9f709df11571e1cba7d1bf.jpg.webp",
     "description": "Pate cho mèo với hương vị hấp dẫn, bổ sung dinh dưỡng giúp mèo ăn ngon miệng và phát triển khỏe mạnh."
   },
@@ -96,6 +106,7 @@
     "price": 550000,
     "material": "Súp thịt",
     "size": "375g",
+    "type": "dog",
     "image": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lnqk4pzx8t7xb4@resize_w900_nl.webp",
     "description": "Súp thịt cao cấp cho chó, giàu dinh dưỡng, giúp bổ sung nước và tăng cường sức khỏe, phù hợp cho chó biếng ăn."
   }

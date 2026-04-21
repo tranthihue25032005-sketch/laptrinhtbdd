@@ -1,11 +1,10 @@
 import { View, Text, StyleSheet, TextInput, Image, FlatList, ScrollView } from "react-native";
 import products from "../data/products.json";
-import { useState,  useEffect, useRef, useContext  } from "react";
+import { useState, useRef, useContext  } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity,  Keyboard } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { TouchableWithoutFeedback, Keyboard } from "react-native";
+
 
 
 export default function HomeScreen({ navigation }: any) {
@@ -14,18 +13,21 @@ export default function HomeScreen({ navigation }: any) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showAllDog, setShowAllDog] = useState(false);//xem tất cả ở chó
   const [showAllCat, setShowAllCat] = useState(false);//ở mèo
-  const [searchHistory, setSearchHistory] = useState<string[]>([]);
-  const [showHistory, setShowHistory] = useState(false);
-  useEffect(() => {
-  const loadHistory = async () => {
-    const history = await AsyncStorage.getItem("searchHistory");
-    if (history) setSearchHistory(JSON.parse(history));
-  };
-  loadHistory();
-  }, []);
-  const dogProducts = products.filter((p: any) =>
-        p.name.toLowerCase().includes("chó")
-      );
+  const [searchText, setSearchText] = useState("");//
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  //Logic lọc
+  const removeVietnameseTones = (str: string) => {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D");
+};
+
+  //tách riêng chó/mèo
+  const dogProducts = products.filter((p: any) => p.type === "dog");
    
     const listRef = useRef<any>(null);
     const scrollToDog = () => {
@@ -43,36 +45,31 @@ export default function HomeScreen({ navigation }: any) {
         animated: true,
       });
     };
-  const catProducts = products.filter((p: any) =>
-        p.name.toLowerCase().includes("mèo")
-      );
-  const [searchText, setSearchText] = useState("");//
-  const removeVietnameseTones = (str: string) => {
-  return str
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D");
-};
-  const filteredProducts = products.filter((p: any) => {
-  const name = removeVietnameseTones(p.name.toLowerCase());
-  const search = removeVietnameseTones(searchText.toLowerCase());
+  const catProducts = products.filter((p: any) => p.type === "cat");
 
-  const keywords = search.split(" "); // tách từng từ
+  //lọc hàng mới
+  const newProducts = products.filter((p: any) => p.isNew === true);
+  
+  const handleSearch = (text: string) => {
+    setSearchText(text);
+    if (text.trim() === "") {
+      setSuggestions([]);
+      setIsSearching(false);
+      return;
+    }
 
-  return keywords.every(word => name.includes(word));
-});
-  const handleSearch = async (text: string) => {
-  setSearchText(text);
+  // Lọc danh sách sản phẩm khớp với chữ đang gõ
+  const search = removeVietnameseTones(text.toLowerCase());
+  const keywords = search.split(" ").filter(word => word);
 
-  if (text.trim() === "") return;
+  const results = products.filter((p: any) => {
+      const name = removeVietnameseTones(p.name.toLowerCase());
+      return keywords.every(word => name.includes(word));
+    });
 
-  let newHistory = [text, ...searchHistory.filter(i => i !== text)];
-  newHistory = newHistory.slice(0, 5); // tối đa 5 cái
-
-  setSearchHistory(newHistory);
-  await AsyncStorage.setItem("searchHistory", JSON.stringify(newHistory));
-};
+    setSuggestions(results);
+    setIsSearching(true); // Đang trong chế độ tìm kiếm
+  };
 
   return (
     <View style={styles.container}>
@@ -147,129 +144,121 @@ export default function HomeScreen({ navigation }: any) {
   </TouchableOpacity>
 </View>
 
-      {/* SEARCH */}
-      <TouchableWithoutFeedback onPress={() => {
-        Keyboard.dismiss();
-        setShowHistory(false);
-      }}>
-      <View style={styles.searchContainer}>
-        <Ionicons name="search-outline" size={20} color="#999" style={styles.searchIcon} />
-        
-       <TextInput
-          placeholder="Tìm kiếm sản phẩm..."
-          style={styles.searchInput}
-          value={searchText}
-          onChangeText={handleSearch}
-          onFocus={() => setShowHistory(true)}
-        />
-      </View>
-      </TouchableWithoutFeedback>
-      {showHistory && searchHistory.length > 0 && (
-          <View style={styles.historyBox}>
-            {searchHistory.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.historyItem}
-                onPress={() => {
-                  setSearchText(item);
-                  setShowHistory(false);
-                }}
-              >
-                <Text>🔍 {item}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )} 
-
-      
-      {/* DANH MỤC */}
-      {/* HEADER DANH MỤC */}
-<View style={styles.menuHeader}>
-  <Text style={styles.title}>DANH MỤC SẢN PHẨM</Text>
-
-  <TouchableOpacity onPress={() => setShowMenu(!showMenu)}>
-    <Text style={styles.menuIcon}>☰</Text>
-  </TouchableOpacity>
-</View>
-
-{/* MENU XỔ XUỐNG */}
-{showMenu && (
-  <View style={styles.dropdownMenu}>
-    
-    <TouchableOpacity style={styles.menuItem}>
-      <Text>🔥 Sản phẩm mới</Text>
-      <Text>›</Text>
-    </TouchableOpacity>
-
-    <TouchableOpacity style={styles.menuItem}
-      
-       onPress={scrollToDog}
-    
-  >
-      <Text>🐶 Dành cho chó</Text>
-      <Text>›</Text>
-    </TouchableOpacity>
-
-    <TouchableOpacity style={styles.menuItem}
-    onPress={scrollToCat}>
-      <Text>🐱 Dành cho mèo</Text>
-      <Text>›</Text>
-    </TouchableOpacity>
-
-    <TouchableOpacity style={styles.menuItem}>
-      <Text>🦴 Dây dắt, phụ kiện</Text>
-      <Text>›</Text>
-    </TouchableOpacity>
-
-    <TouchableOpacity style={styles.menuItem}>
-      <Text>👕 Quần áo</Text>
-      <Text>›</Text>
-    </TouchableOpacity>
-
-    <TouchableOpacity style={styles.menuItem}>
-      <Text>🥣 Bát, bình chứa</Text>
-      <Text>›</Text>
-    </TouchableOpacity>
-
-  </View>
-  )}
-</View>
-  <FlatList
-    ref={listRef}
-    data={filteredProducts}
-    numColumns={2}
-    keyExtractor={(item: any) => item.id.toString()}
-    ListHeaderComponent={
-            <>
-    {/* BANNER */}
-
-            <Image
-              source={require("../assets/banner.png")}
-              style={styles.banner}
+      {/* SEARCH BAR GIỐNG SHOPEE */}
+        <View style={styles.searchRow}>
+          {isSearching && (
+            <TouchableOpacity onPress={() => { setIsSearching(false); setSearchText(""); }}>
+              <Ionicons name="arrow-back" size={24} color="#ff6699" />
+            </TouchableOpacity>
+          )}
+          
+          <View style={styles.searchContainer}>
+            <TextInput
+              placeholder="Tìm kiếm sản phẩm..."
+              style={styles.searchInput}
+              value={searchText}
+              onChangeText={handleSearch}
+              onSubmitEditing={() => Keyboard.dismiss()} // Nhấn Enter để đóng phím
             />
-            <Text style={styles.title}>Hàng Mới Về</Text>
-          </>
-        }
-  renderItem={({ item }: any) => (
-    <TouchableOpacity 
-  style={styles.card}
-  onPress={() => navigation.navigate("Products", { product: item })}
->
+            {searchText !== "" && (
+              <TouchableOpacity onPress={() => { setSearchText(""); setSuggestions([]); setIsSearching(false); }}>
+                <Ionicons name="close-circle" size={18} color="#ccc" />
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity style={styles.searchButton} onPress={() => Keyboard.dismiss()}>
+              <Ionicons name="search" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        </View>
+ 
+      
+</View>
   
-      <Image source={{ uri: item.image }} style={styles.img} />
-      <Text numberOfLines={2}>{item.name}</Text>
-      <Text style={styles.price}>{item.price.toLocaleString()}đ</Text>
-      </TouchableOpacity>
-    
-    
-  )}
+  {/* FLATLIST CHÍNH: Hiển thị sản phẩm */}
+      <FlatList
+        data={isSearching ? suggestions : newProducts} // Nếu tìm kiếm thì hiện list lọc, ko thì hiện tất cả
+        numColumns={2}
+        keyExtractor={(item: any) => item.id.toString()}
+        ListHeaderComponent={
+          !isSearching ? (
+            <>
+              
+              {/* DANH MỤC SẢN PHẨM Ở ĐÂY */}
+              <View style={styles.menuHeader}>
+                <Text style={styles.title}>DANH MỤC SẢN PHẨM</Text>
+                <TouchableOpacity onPress={() => setShowMenu(!showMenu)}>
+                  <Text style={styles.menuIcon}>☰</Text>
+                </TouchableOpacity>
+              </View>
+              
+              {/* ... DropdownMenu ... */}
+              {/* MENU XỔ XUỐNG */}
+              {showMenu && (
+                <View style={styles.dropdownMenu}>
+                  
+                  <TouchableOpacity style={styles.menuItem}>
+                    <Text>🔥 Sản phẩm mới</Text>
+                    <Text>›</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.menuItem}
+                    
+                    onPress={scrollToDog}
+                  
+                >
+                    <Text>🐶 Dành cho chó</Text>
+                    <Text>›</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.menuItem}
+                  onPress={scrollToCat}>
+                    <Text>🐱 Dành cho mèo</Text>
+                    <Text>›</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.menuItem}>
+                    <Text>🦴 Dây dắt, phụ kiện</Text>
+                    <Text>›</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.menuItem}>
+                    <Text>👕 Quần áo</Text>
+                    <Text>›</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.menuItem}>
+                    <Text>🥣 Bát, bình chứa</Text>
+                    <Text>›</Text>
+                  </TouchableOpacity>
+
+                </View>
+                )}
+                <Image source={require("../assets/banner.png")} style={styles.banner} />
+              <Text style={styles.title}>Hàng Mới Về</Text>
+              
+            </>
+          ) : (
+            <Text style={styles.title}>Kết quả cho: "{searchText}"</Text>
+          )
+        }
+        renderItem={({ item }: any) => (
+          <TouchableOpacity 
+            style={styles.card}
+            onPress={() => navigation.navigate("Products", { product: item })}
+          >
+            <Image source={{ uri: item.image }} style={styles.img} />
+            <Text numberOfLines={2}>{item.name}</Text>
+            <Text style={styles.price}>{item.price.toLocaleString()}đ</Text>
+          </TouchableOpacity>
+        )}
+
 
   ListFooterComponent={
     searchText === "" ? (
     <>
       {/* 🐶 DÀNH CHO CHÓ */}
       <View style={styles.rowBetween}>
-        <Text style={styles.title}>🐶 Dành cho chó</Text>
+        <Text style={styles.title}>🐶 Dành Cho Chó</Text>
         <TouchableOpacity onPress={() => setShowAllDog(!showAllDog)}>
           <Text style={styles.seeAll}>
             {showAllDog ? "Thu gọn" : "Xem tất cả"}
@@ -301,7 +290,7 @@ export default function HomeScreen({ navigation }: any) {
 
       {/* 🐱 DÀNH CHO MÈO */}
       <View style={styles.rowBetween}>
-        <Text style={styles.title}>🐱 Dành cho mèo</Text>
+        <Text style={styles.title}>🐱 Dành Cho Mèo</Text>
         <TouchableOpacity onPress={() => setShowAllCat(!showAllCat)}>
           <Text style={styles.seeAll}>
             {showAllCat ? "Thu gọn" : "Xem tất cả"}
@@ -408,27 +397,54 @@ iconCircle: {
 },
 
 //css tìm kiếm
+  searchRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 10,
+  },
   searchContainer: {
-  flexDirection: "row",
-  alignItems: "center",
-  backgroundColor: "#fff",
-  borderRadius: 25,
-  paddingHorizontal: 15,
-  paddingVertical: 8,
-  borderWidth: 1,
-  borderColor: "#eee",
-  elevation: 2,
-  marginBottom: 10,
-},
-
-searchIcon: {
-  marginRight: 8,
-},
-
-searchInput: {
-  flex: 1,
-  fontSize: 14,
-},
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 4, // Shopee dùng bo góc ít hơn
+    borderWidth: 1.5,
+    borderColor: "#ff6699", // Màu chủ đạo của bạn
+    height: 40,
+    overflow: "hidden",
+  },
+  searchInput: {
+    flex: 1,
+    paddingLeft: 10,
+    fontSize: 14,
+  },
+  searchButton: {
+    backgroundColor: "#ff6699",
+    height: "100%",
+    width: 45,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  suggestionBox: {
+    //position: "absolute",
+    top: 120, // Chỉnh sao cho nó khớp ngay dưới thanh search
+    left: 0,
+    right: 0,
+    bottom: 0, // Kéo dài xuống hết màn hình như Shopee
+    backgroundColor: "#fff",
+    zIndex: 999,
+  },
+  suggestionItem: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#eee",
+  },
+  suggestionText: {
+    fontSize: 15,
+    color: "#333",
+  },
 
 historyBox: {
   backgroundColor: "#fff",

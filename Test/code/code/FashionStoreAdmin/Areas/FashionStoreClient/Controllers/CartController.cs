@@ -73,7 +73,7 @@ public class CartController : Controller
         var order = new ClientOrder
         {
             CustomerName = model.CustomerName.Trim(),
-            Phone = model.Phone.Trim(),
+            PhoneNumber = model.PhoneNumber.Trim(),
             Address = model.Address.Trim(),
             TotalAmount = model.TotalAmount,
             PaymentMethod = paymentMethod,
