@@ -11,11 +11,10 @@ export default function HomeScreen({ navigation }: any) {
   const [showMenu, setShowMenu] = useState(false);
   const { user, logout } = useContext(AuthContext);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showAllDog, setShowAllDog] = useState(false);//xem tất cả ở chó
-  const [showAllCat, setShowAllCat] = useState(false);//ở mèo
-  const [searchText, setSearchText] = useState("");//
+  const [searchText, setSearchText] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   //Logic lọc
   const removeVietnameseTones = (str: string) => {
@@ -29,22 +28,6 @@ export default function HomeScreen({ navigation }: any) {
   //tách riêng chó/mèo
   const dogProducts = products.filter((p: any) => p.type === "dog");
    
-    const listRef = useRef<any>(null);
-    const scrollToDog = () => {
-      setShowMenu(false);
-      listRef.current?.scrollToOffset({
-        offset: 700,
-        animated: true,
-      });
-    };
-
-    const scrollToCat = () => {
-      setShowMenu(false);
-      listRef.current?.scrollToOffset({
-        offset: 1100,
-        animated: true,
-      });
-    };
   const catProducts = products.filter((p: any) => p.type === "cat");
 
   //lọc hàng mới
@@ -176,7 +159,7 @@ export default function HomeScreen({ navigation }: any) {
   
   {/* FLATLIST CHÍNH: Hiển thị sản phẩm */}
       <FlatList
-        data={isSearching ? suggestions : newProducts} // Nếu tìm kiếm thì hiện list lọc, ko thì hiện tất cả
+        data={isSearching ? suggestions : selectedCategory === null ? products : selectedCategory === 'new' ? newProducts : selectedCategory === 'dog' ? dogProducts : selectedCategory === 'cat' ? catProducts : newProducts} // Nếu tìm kiếm thì hiện list lọc, ko thì hiện theo category
         numColumns={2}
         keyExtractor={(item: any) => item.id.toString()}
         ListHeaderComponent={
@@ -192,49 +175,51 @@ export default function HomeScreen({ navigation }: any) {
               </View>
               
               {/* ... DropdownMenu ... */}
-              {/* MENU XỔ XUỐNG */}
               {showMenu && (
                 <View style={styles.dropdownMenu}>
                   
-                  <TouchableOpacity style={styles.menuItem}>
+                  <TouchableOpacity style={styles.menuItem} onPress={() => { setSelectedCategory(null); setShowMenu(false); }}>
+                    <Text>🏠 Tất cả</Text>
+                    <Ionicons name="chevron-forward" size={16} color="#333" />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.menuItem} onPress={() => { setSelectedCategory('new'); setShowMenu(false); }}>
                     <Text>🔥 Sản phẩm mới</Text>
-                    <Text>›</Text>
+                    <Ionicons name="chevron-forward" size={16} color="#333" />
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.menuItem}
-                    
-                    onPress={scrollToDog}
-                  
-                >
+                  <TouchableOpacity style={styles.menuItem} onPress={() => { setSelectedCategory('dog'); setShowMenu(false); }}>
                     <Text>🐶 Dành cho chó</Text>
-                    <Text>›</Text>
+                    <Ionicons name="chevron-forward" size={16} color="#333" />
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.menuItem}
-                  onPress={scrollToCat}>
+                  <TouchableOpacity style={styles.menuItem} onPress={() => { setSelectedCategory('cat'); setShowMenu(false); }}>
                     <Text>🐱 Dành cho mèo</Text>
-                    <Text>›</Text>
+                    <Ionicons name="chevron-forward" size={16} color="#333" />
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.menuItem}>
                     <Text>🦴 Dây dắt, phụ kiện</Text>
-                    <Text>›</Text>
+                    <Ionicons name="chevron-forward" size={16} color="#333" />
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.menuItem}>
                     <Text>👕 Quần áo</Text>
-                    <Text>›</Text>
+                    <Ionicons name="chevron-forward" size={16} color="#333" />
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.menuItem}>
                     <Text>🥣 Bát, bình chứa</Text>
-                    <Text>›</Text>
+                    <Ionicons name="chevron-forward" size={16} color="#333" />
                   </TouchableOpacity>
 
                 </View>
                 )}
                 <Image source={require("../assets/banner.png")} style={styles.banner} />
-              <Text style={styles.title}>Hàng Mới Về</Text>
+              {selectedCategory === 'new' ? <Text style={styles.title}>Sản Phẩm Mới</Text> :
+              selectedCategory === 'dog' ? <Text style={styles.title}>Dành Cho Chó</Text> :
+              selectedCategory === 'cat' ? <Text style={styles.title}>Dành Cho Mèo</Text> :
+              <Text style={styles.title}>Hàng Mới Về</Text>}
               
             </>
           ) : (
@@ -256,68 +241,7 @@ export default function HomeScreen({ navigation }: any) {
   ListFooterComponent={
     searchText === "" ? (
     <>
-      {/* 🐶 DÀNH CHO CHÓ */}
-      <View style={styles.rowBetween}>
-        <Text style={styles.title}>🐶 Dành Cho Chó</Text>
-        <TouchableOpacity onPress={() => setShowAllDog(!showAllDog)}>
-          <Text style={styles.seeAll}>
-            {showAllDog ? "Thu gọn" : "Xem tất cả"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      
-
-      <FlatList
-        data={showAllDog ? dogProducts : dogProducts.slice(0, 4)}
-        numColumns={2}
-        scrollEnabled={false}//vì flat trong flat nên dùng này để tránh lỗi 
-        keyExtractor={(item: any) => item.id.toString()}
-        renderItem={({ item }: any) => (
-
-          <TouchableOpacity
-            style={styles.smallCard}
-            onPress={() =>
-              navigation.navigate("Products", { product: item })
-            }
-          >
-            <Image source={{ uri: item.image }} style={styles.smallImg} />
-            <Text numberOfLines={1}>{item.name}</Text>
-            <Text style={styles.price}>{item.price.toLocaleString()}đ</Text>
-          </TouchableOpacity>
-
-        )}
-      />
-
-      {/* 🐱 DÀNH CHO MÈO */}
-      <View style={styles.rowBetween}>
-        <Text style={styles.title}>🐱 Dành Cho Mèo</Text>
-        <TouchableOpacity onPress={() => setShowAllCat(!showAllCat)}>
-          <Text style={styles.seeAll}>
-            {showAllCat ? "Thu gọn" : "Xem tất cả"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-     
-      <FlatList
-        data={showAllCat ? catProducts : catProducts.slice(0, 4)}
-        numColumns={2}
-        scrollEnabled={false}
-        keyExtractor={(item: any) => item.id.toString()}
-        renderItem={({ item }: any) => (
-          <TouchableOpacity
-            style={styles.smallCard}
-            onPress={() =>
-              navigation.navigate("Products", { product: item })
-            }
-          >
-            <Image source={{ uri: item.image }} style={styles.smallImg} />
-            <Text numberOfLines={1}>{item.name}</Text>
-            <Text style={styles.price}>{item.price.toLocaleString() }đ</Text>
-          </TouchableOpacity>
-        )}
-      />
-
-      {/* 📍 THÔNG TIN */}
+      {/*  THÔNG TIN */}
       <View style={styles.footer}>
         <Text style={styles.footerTitle}>📍 Địa chỉ</Text>
         <Text>Nam Định, Việt Nam</Text>
