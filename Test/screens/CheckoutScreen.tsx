@@ -1,8 +1,9 @@
 import { 
-  View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Alert 
+  View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Alert, ScrollView
 } from 'react-native';
 import { useState, useContext } from "react";
 import { TextInput } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { CartContext } from '../context/CartContext';
 import { OrderContext } from "../context/OrderContext";
 import { AuthContext } from "../context/AuthContext";
@@ -43,79 +44,148 @@ export default function CheckoutScreen({ navigation, route }: any) {
   return (
     <View style={styles.container}>
       
-      {/* 📦 DANH SÁCH SẢN PHẨM */}
-      <Text style={styles.title}>Sản phẩm</Text>
-
-      <FlatList
-        data={items}
-        keyExtractor={(item: any) => item.id.toString()}
-        renderItem={({ item }: any) => (
-          <View style={styles.item}>
-            <Image source={{ uri: item.image }} style={styles.img} />
-
-            <View style={{ flex: 1 }}>
-              <Text numberOfLines={1}>{item.name}</Text>
-              <Text>Số lượng: {item.quantity}</Text>
-            </View>
-
-            <Text style={styles.price}>
-              {item.price * item.quantity}đ
-            </Text>
-          </View>
-        )}
-      />
-      {/* 📍 THÔNG TIN GIAO HÀNG */}
-        <Text style={styles.title}>Thông tin giao hàng</Text>
-
-        <TextInput
-          value={address}
-          onChangeText={setAddress}
-          placeholder="Địa chỉ"
-          style={styles.input}
-        />
-
-        <TextInput
-          value={phone}
-          onChangeText={setPhone}
-          placeholder="Số điện thoại"
-          style={styles.input}
-        />
-
-        <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
-          <Text style={{ color: "#007bff", marginBottom: 10 }}>
-            Thay đổi từ hồ sơ
-          </Text>
-        </TouchableOpacity>
-
-        <Text style={styles.title}>Phương thức thanh toán</Text>
-
-        <TouchableOpacity
-          style={styles.paymentItem}
-          onPress={() => setPaymentMethod("COD")}
+      {/* HEADER */}
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backBtn}
+          onPress={() => navigation.goBack()}
         >
-          <Text>Thanh toán khi nhận hàng</Text>
-          <Text>{paymentMethod === "COD" ? "✔️" : ""}</Text>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.paymentItem}
-          onPress={() => setPaymentMethod("MOMO")}
-        >
-          <Text>Ví điện tử </Text>
-          <Text>{paymentMethod === "MOMO" ? "✔️" : ""}</Text>
-        </TouchableOpacity>
-
-      {/* 💰 TỔNG TIỀN */}
-      <View style={styles.totalBox}>
-        <Text style={styles.totalText}>Tổng tiền:</Text>
-        <Text style={styles.totalPrice}>{total}đ</Text>
+        <Text style={styles.headerTitle}>Thanh Toán</Text>
+        <View style={{ width: 30 }} />
       </View>
 
-      {/* 🛒 NÚT THANH TOÁN */}
-      <TouchableOpacity style={styles.btn} onPress={handleCheckout}>
-        <Text style={styles.btnText}>Xác nhận đặt hàng</Text>
-      </TouchableOpacity>
+      <ScrollView 
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
       
+      {/* 📦 DANH SÁCH SẢN PHẨM */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>📦 Sản Phẩm ({items.length})</Text>
+        
+        <FlatList
+          data={items}
+          keyExtractor={(item: any) => item.id.toString()}
+          scrollEnabled={false}
+          renderItem={({ item }: any) => (
+            <View style={styles.productCard}>
+              <Image source={{ uri: item.image }} style={styles.productImg} />
+              
+              <View style={styles.productInfo}>
+                <Text style={styles.productName} numberOfLines={2}>{item.name}</Text>
+                <Text style={styles.productQty}>Số lượng: {item.quantity}</Text>
+                <Text style={styles.productPrice}>{item.price.toLocaleString()}đ</Text>
+              </View>
+              
+              <View style={styles.productTotal}>
+                <Text style={styles.totalItemPrice}>
+                  {(item.price * item.quantity).toLocaleString()}đ
+                </Text>
+              </View>
+            </View>
+          )}
+        />
+      </View>
+
+      {/* 📍 THÔNG TIN GIAO HÀNG */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>📍 Thông Tin Giao Hàng</Text>
+        
+        <View style={styles.formCard}>
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Địa chỉ</Text>
+            <TextInput
+              value={address}
+              onChangeText={setAddress}
+              placeholder="Nhập địa chỉ giao hàng"
+              style={styles.input}
+              multiline
+              numberOfLines={2}
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Số điện thoại</Text>
+            <TextInput
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="Nhập số điện thoại"
+              style={styles.input}
+              keyboardType="phone-pad"
+            />
+          </View>
+        </View>
+
+        <TouchableOpacity style={styles.profileLink} onPress={() => navigation.navigate("EditProfile")}>
+          <Ionicons name="person-circle-outline" size={16} color="#ff6699" />
+          <Text style={styles.profileLinkText}>Sử dụng thông tin hồ sơ</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* 💳 PHƯƠNG THỨC THANH TOÁN */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>💳 Phương Thức Thanh Toán</Text>
+        
+        <TouchableOpacity
+          style={[
+            styles.paymentOption,
+            paymentMethod === "COD" && styles.paymentOptionSelected
+          ]}
+          onPress={() => setPaymentMethod("COD")}
+        >
+          <View style={styles.paymentIcon}>
+            <Ionicons 
+              name={paymentMethod === "COD" ? "radio-button-on" : "radio-button-off"} 
+              size={20} 
+              color={paymentMethod === "COD" ? "#ff6699" : "#ccc"} 
+            />
+          </View>
+          <View style={{flex: 1}}>
+            <Text style={styles.paymentName}>Thanh toán khi nhận hàng</Text>
+            <Text style={styles.paymentDesc}>Trả tiền khi nhận đơn hàng</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.paymentOption,
+            paymentMethod === "MOMO" && styles.paymentOptionSelected
+          ]}
+          onPress={() => setPaymentMethod("MOMO")}
+        >
+          <View style={styles.paymentIcon}>
+            <Ionicons 
+              name={paymentMethod === "MOMO" ? "radio-button-on" : "radio-button-off"} 
+              size={20} 
+              color={paymentMethod === "MOMO" ? "#ff6699" : "#ccc"} 
+            />
+          </View>
+          <View style={{flex: 1}}>
+            <Text style={styles.paymentName}>Ví điện tử MoMo</Text>
+            <Text style={styles.paymentDesc}>Thanh toán qua ứng dụng MoMo</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      {/* 💰 TỔNG TIỀN */}
+      <View style={styles.totalSection}>
+        <View style={styles.totalCard}>
+          <Text style={styles.totalLabel}>Tổng cộng:</Text>
+          <Text style={styles.totalAmount}>{total.toLocaleString()}đ</Text>
+        </View>
+      </View>
+
+      </ScrollView>
+
+      {/* 🛒 NÚT THANH TOÁN */}
+      <View style={styles.bottomBar}>
+        <TouchableOpacity style={styles.checkoutBtn} onPress={handleCheckout}>
+          <Ionicons name="bag-check-outline" size={20} color="#fff" />
+          <Text style={styles.checkoutBtnText}>Đặt Hàng Ngay</Text>
+        </TouchableOpacity>
+      </View>
 
     </View>
   );
@@ -124,86 +194,251 @@ export default function CheckoutScreen({ navigation, route }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f8f9fa',
+  },
+
+  header: {
+    backgroundColor: '#ff6699',
     padding: 15,
-    backgroundColor: "#fff",
+    paddingTop: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
 
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#ff6699",
+  backBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
-  item: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-    backgroundColor: "#f9f9f9",
-    padding: 10,
-    borderRadius: 10,
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+    flex: 1,
+    textAlign: 'center',
   },
 
-  img: {
-    width: 60,
-    height: 60,
-    borderRadius: 10,
-    marginRight: 10,
-  },
-
-  price: {
-    color: "#ff6600",
-    fontWeight: "bold",
-  },
-
-  totalBox: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 15,
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderColor: "#eee",
-  },
-
-  totalText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-
-  totalPrice: {
-    fontSize: 16,
-    color: "#ff3333",
-    fontWeight: "bold",
-  },
-
-  btn: {
-    marginTop: 15,
-    backgroundColor: "#ff6699",
+  scrollContainer: {
+    flex: 1,
     padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
   },
 
-  btnText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
+  section: {
+    marginBottom: 20,
   },
+
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#ff6699',
+    marginBottom: 12,
+  },
+
+  productCard: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
+    elevation: 2,
+    alignItems: 'center',
+  },
+
+  productImg: {
+    width: 70,
+    height: 70,
+    borderRadius: 8,
+    marginRight: 12,
+  },
+
+  productInfo: {
+    flex: 1,
+  },
+
+  productName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 4,
+  },
+
+  productQty: {
+    fontSize: 12,
+    color: '#999',
+    marginBottom: 4,
+  },
+
+  productPrice: {
+    fontSize: 13,
+    color: '#ff6699',
+    fontWeight: '600',
+  },
+
+  productTotal: {
+    alignItems: 'flex-end',
+  },
+
+  totalItemPrice: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#ff6699',
+  },
+
+  formCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+
+  inputGroup: {
+    marginBottom: 12,
+  },
+
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 8,
+  },
+
   input: {
-  borderWidth: 1,
-  borderColor: "#ccc",
-  borderRadius: 10,
-  padding: 10,
-  marginBottom: 10,
-  backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 14,
+    backgroundColor: '#fafafa',
+    color: '#333',
   },
-  paymentItem: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  padding: 12,
-  borderWidth: 1,
-  borderColor: "#eee",
-  borderRadius: 10,
-  marginBottom: 10,
+
+  profileLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 102, 153, 0.1)',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 12,
+  },
+
+  profileLinkText: {
+    color: '#ff6699',
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+
+  paymentOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 10,
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+
+  paymentOptionSelected: {
+    borderColor: '#ff6699',
+    backgroundColor: 'rgba(255, 102, 153, 0.05)',
+  },
+
+  paymentIcon: {
+    marginRight: 12,
+  },
+
+  paymentName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 2,
+  },
+
+  paymentDesc: {
+    fontSize: 12,
+    color: '#999',
+  },
+
+  totalSection: {
+    marginBottom: 20,
+  },
+
+  totalCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+
+  totalLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+
+  totalAmount: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ff6699',
+  },
+
+  bottomBar: {
+    padding: 15,
+    paddingBottom: 20,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+  },
+
+  checkoutBtn: {
+    backgroundColor: '#ff6699',
+    paddingVertical: 15,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    shadowColor: '#ff6699',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  checkoutBtnText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginLeft: 8,
   },
 });

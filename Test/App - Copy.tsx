@@ -53,7 +53,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { CartProvider } from './context/CartContext';
 
 import HomeScreen from './screens/HomeScreen';
-import OrderScreen from './screens/OrderScreen';
+import OrderHistoryScreen from './screens/OrderHistoryScreen';
 import CartScreen from './screens/CartScreen';
 
 const Stack = createNativeStackNavigator();
@@ -64,7 +64,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Order" component={OrderScreen} />
+          <Stack.Screen name="Order" component={OrderHistoryScreen} />
           <Stack.Screen name="Cart" component={CartScreen} />
         </Stack.Navigator>
       </NavigationContainer>
