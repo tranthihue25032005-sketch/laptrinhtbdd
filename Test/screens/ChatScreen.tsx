@@ -17,13 +17,18 @@ export default function ChatScreen() {
 
   const [message, setMessage] = useState("");
 
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>(([
+    {
+      role: "bot",
+      text: "🐶 Xin chào! Mình là trợ lý CutePets. Bạn cần tư vấn gì cho thú cưng?",
+    },
+  ]));
 
   const sendMessage = async () => {
 
-    if (!message) return;
+    if (!message.trim()) return;
 
-    // lưu tin nhắn user
+    // tin nhắn user
     const userMessage = {
       role: "user",
       text: message,
@@ -33,14 +38,27 @@ export default function ChatScreen() {
 
     try {
 
+      const prompt = `
+Bạn là chatbot tư vấn bán đồ thú cưng của shop CutePets.
+
+Hãy:
+- trả lời thân thiện
+- ngắn gọn
+- có icon chó mèo
+- tư vấn đồ cho thú cưng
+
+Khách hỏi:
+${message}
+`;
+
       const response = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDJUj3zGPQ_YE_hTCyRotaS8C47Pwtf5w4",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBZHd3thS3I7ZdRaC7RCHl5JBVyeJx9-uU",
         {
           contents: [
             {
               parts: [
                 {
-                  text: message,
+                  text: prompt,
                 },
               ],
             },
@@ -49,7 +67,8 @@ export default function ChatScreen() {
       );
 
       const botText =
-        response.data.candidates[0].content.parts[0].text;
+        response.data.candidates?.[0]?.content?.parts?.[0]?.text
+        || "🐾 Mình chưa trả lời được.";
 
       const botMessage = {
         role: "bot",
@@ -60,56 +79,84 @@ export default function ChatScreen() {
 
     } catch (error: any) {
 
-  console.log("LOI:", error.response?.data || error.message);
+      console.log("LOI:", error.response?.data || error.message);
 
-}
+      const botMessage = {
+        role: "bot",
+        text: "⚠️ Chatbot đang bận, thử lại sau nhé!",
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
+    }
 
     setMessage("");
   };
 
   return (
+
     <KeyboardAvoidingView
-    style={{ flex: 1 }}
-    behavior={Platform.OS === "ios" ? "padding" : undefined}
-  >
-    <View style={styles.container}>
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
 
-      <FlatList
-        data={messages}
-        keyboardShouldPersistTaps="handled"
-        renderItem={({ item }) => (
-          <View
-            style={[
-              styles.message,
-              item.role === "user"
-                ? styles.userMessage
-                : styles.botMessage,
-            ]}
-          >
-            <Text>{item.text}</Text>
-          </View>
-        )}
-      />
+      <View style={styles.container}>
 
-      <View style={styles.inputContainer}>
+        {/* HEADER */}
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>
+            🐶 CutePets AI Assistant
+          </Text>
+        </View>
 
-        <TextInput
-          value={message}
-          onChangeText={setMessage}
-          placeholder="Nhập tin nhắn..."
-          style={styles.input}
+        {/* CHAT */}
+        <FlatList
+          data={messages}
+          keyExtractor={(item, index) => index.toString()}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            paddingBottom: 120,
+          }}
+          renderItem={({ item }) => (
+
+            <View
+              style={[
+                styles.message,
+                item.role === "user"
+                  ? styles.userMessage
+                  : styles.botMessage,
+              ]}
+            >
+              <Text style={styles.messageText}>
+                {item.text}
+              </Text>
+            </View>
+
+          )}
         />
 
-        <TouchableOpacity
-          style={styles.sendBtn}
-          onPress={sendMessage}
-        >
-          <Text style={{ color: "#fff" }}>Gửi</Text>
-        </TouchableOpacity>
+        {/* INPUT */}
+        <View style={styles.inputContainer}>
+
+          <TextInput
+            value={message}
+            onChangeText={setMessage}
+            placeholder="Nhập câu hỏi về thú cưng..."
+            style={styles.input}
+          />
+
+          <TouchableOpacity
+            style={styles.sendBtn}
+            onPress={sendMessage}
+          >
+            <Text style={styles.sendText}>
+              Gửi
+            </Text>
+          </TouchableOpacity>
+
+        </View>
 
       </View>
 
-    </View>
     </KeyboardAvoidingView>
   );
 }
@@ -117,17 +164,29 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
 
   container: {
-  flex: 1,
-  padding: 10,
-  backgroundColor: "#fff",
+    flex: 1,
+    backgroundColor: "#fff5f8",
+  },
 
-  paddingBottom: 0,
-},
+  header: {
+    backgroundColor: "#ff6699",
+    paddingTop: 50,
+    paddingBottom: 15,
+    alignItems: "center",
+  },
+
+  headerTitle: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
 
   message: {
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 10,
+    maxWidth: "80%",
+    padding: 12,
+    borderRadius: 15,
+    marginVertical: 6,
+    marginHorizontal: 10,
   },
 
   userMessage: {
@@ -136,37 +195,63 @@ const styles = StyleSheet.create({
   },
 
   botMessage: {
-    backgroundColor: "#eee",
+    backgroundColor: "#fff",
     alignSelf: "flex-start",
+    borderWidth: 1,
+    borderColor: "#ffe0eb",
+  },
+
+  messageText: {
+    fontSize: 15,
+    color: "#333",
   },
 
   inputContainer: {
 
-  flexDirection: "row",
+    position: "absolute",
 
-  alignItems: "center",
+    bottom: 0,
 
-  paddingVertical: 10,
+    left: 0,
 
-  paddingBottom: 40,
+    right: 0,
 
-  backgroundColor: "#fff",
-},
+    flexDirection: "row",
+
+    alignItems: "center",
+
+    padding: 10,
+
+    paddingBottom: Platform.OS === "android" ? 25 : 10,
+
+    backgroundColor: "#fff",
+
+    borderTopWidth: 1,
+
+    borderTopColor: "#eee",
+  },
 
   input: {
     flex: 1,
+    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 10,
+    borderColor: "#ffd6e7",
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
   },
 
   sendBtn: {
     backgroundColor: "#ff6699",
-    padding: 10,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 25,
     marginLeft: 10,
-    borderRadius: 10,
-    justifyContent: "center",
+  },
+
+  sendText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 
 });
