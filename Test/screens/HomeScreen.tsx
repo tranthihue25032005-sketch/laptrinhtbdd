@@ -89,8 +89,7 @@ export default function HomeScreen({ navigation }: any) {
         setShowUserMenu(false);
         navigation.navigate("Orders");
       }}
-    >
-      <Text> Đơn hàng</Text>
+    ><Text>Đơn hàng</Text>
       </TouchableOpacity>
     <TouchableOpacity 
       style={styles.userMenuItem}
@@ -98,8 +97,7 @@ export default function HomeScreen({ navigation }: any) {
         setShowUserMenu(false);
         navigation.navigate("Profile");
       }}
-    >
-      <Text> Hồ sơ</Text>
+    ><Text>Hồ sơ</Text>
     </TouchableOpacity>
 
     <TouchableOpacity 
@@ -110,8 +108,7 @@ export default function HomeScreen({ navigation }: any) {
         
         navigation.navigate("Home");
       }}
-    >
-      <Text> Đăng xuất</Text>
+    ><Text>Đăng xuất</Text>
     </TouchableOpacity>
 
   </View>
@@ -256,6 +253,16 @@ export default function HomeScreen({ navigation }: any) {
     ):null
   }
 />
+  <TouchableOpacity
+  style={styles.chatButton}
+  onPress={() => navigation.navigate("Chat")}
+>
+  <Ionicons
+    name="chatbubble-ellipses"
+    size={28}
+    color="#fff"
+  />
+</TouchableOpacity>
     </View>
   );
 }
@@ -457,7 +464,7 @@ smallImg: {
   marginBottom: 5,
 },
 
-//
+//chatbot
 rowBetween: {
   flexDirection: "row",
   justifyContent: "space-between",
@@ -470,6 +477,33 @@ seeAll: {
 },
 
 //
+chatButton: {
+  position: "absolute",
+
+  bottom: 25,
+  right: 20,
+
+  width: 60,
+  height: 60,
+
+  borderRadius: 30,
+
+  backgroundColor: "#ff6699",
+
+  justifyContent: "center",
+  alignItems: "center",
+
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 3,
+  },
+
+  shadowOpacity: 0.3,
+  shadowRadius: 4,
+
+  elevation: 5,
+},
 
 footer: {
   marginTop: 20,

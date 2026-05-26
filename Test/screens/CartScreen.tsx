@@ -83,8 +83,7 @@ export default function CartScreen({ navigation }: any) {
           <TouchableOpacity 
             style={styles.shopNowBtn}
             onPress={() => navigation.navigate('Home')}
-          >
-            <Text style={styles.shopNowText}>Mua sắm ngay</Text>
+          ><Text style={styles.shopNowText}>Mua sắm ngay</Text>
           </TouchableOpacity>
         </View>
       ) : (

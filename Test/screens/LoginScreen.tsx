@@ -34,7 +34,7 @@ export default function LoginScreen({ navigation }: any) {
           <Text style={styles.backText}>←</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Đăng Nhập</Text>
-        <View style={{ width: 30 }} /> {/* Spacer */}
+        <View style={{ width: 30 }} />
       </View>
 
       <ScrollView 

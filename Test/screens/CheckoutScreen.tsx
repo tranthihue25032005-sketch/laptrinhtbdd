@@ -8,6 +8,7 @@ import { CartContext } from '../context/CartContext';
 import { OrderContext } from "../context/OrderContext";
 import { AuthContext } from "../context/AuthContext";
 
+
 export default function CheckoutScreen({ navigation, route }: any) {
   const { cart, clearCart } = useContext(CartContext);
   const { addOrder } = useContext(OrderContext);
@@ -24,21 +25,25 @@ export default function CheckoutScreen({ navigation, route }: any) {
   );
 
   const handleCheckout = () => {
+
   if (!address || !phone) {
     Alert.alert("Lỗi", "Vui lòng nhập đầy đủ thông tin!");
     return;
   }
 
+  
+
+  // COD
   addOrder({
-    items: items,
+    items,
     address,
     phone,
-    paymentMethod, 
+    paymentMethod,
   });
 
-  Alert.alert("🎉 Thành công", "Đơn hàng của bạn đã được đặt!");
+  Alert.alert("🎉 Thành công", "Đặt hàng thành công!");
   clearCart();
-  navigation.navigate('Orders');
+  navigation.navigate("Orders");
 };
 
   return (

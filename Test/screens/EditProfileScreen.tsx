@@ -40,7 +40,7 @@ export default function EditProfileScreen({ navigation }: any) {
           <Text style={styles.backText}>←</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Chỉnh Sửa Hồ Sơ</Text>
-        <View style={{ width: 30 }} /> {/* Spacer */}
+        <View style={{ width: 30 }} /> 
       </View>
 
       <ScrollView 

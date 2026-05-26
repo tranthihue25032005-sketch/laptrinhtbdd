@@ -38,7 +38,7 @@ export default function OrderHistoryScreen({ navigation }: any) {
           <Text style={styles.backText}>←</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Lịch Sử Đơn Hàng</Text>
-        <View style={{ width: 30 }} /> {/* Spacer */}
+        <View style={{ width: 30 }} />
       </View>
 
       {/* CONTENT */}

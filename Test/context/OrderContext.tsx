@@ -8,6 +8,9 @@ type Order = {
   items: any[];
   total: number;
   status: string;
+  address: string;
+  phone: string;
+  paymentMethod: string;
 };
 
 export const OrderProvider = ({ children }: any) => {

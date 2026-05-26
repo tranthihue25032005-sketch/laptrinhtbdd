@@ -39,7 +39,7 @@ export default function RegisterScreen({ navigation }: any) {
           <Text style={styles.backText}>←</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Đăng Ký Tài Khoản</Text>
-        <View style={{ width: 30 }} /> {/* Spacer */}
+        <View style={{ width: 30 }} />
       </View>
 
       <ScrollView 
@@ -122,7 +122,7 @@ export default function RegisterScreen({ navigation }: any) {
           onPress={() => navigation.navigate('Login')}
         >
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={styles.loginText}>Đã có tài khoản? </Text>
+            <Text style={styles.loginText}>Đã có tài khoản?</Text>
             <Text style={styles.loginLink}>Đăng nhập</Text>
           </View>
         </TouchableOpacity>
